@@ -1,8 +1,22 @@
 const express = require('express');
 const app = express();
 
-app.get('/', ( req, res ) => {
-    res.send('Hola Grunin');
+app.get('/login', ( req, res ) => {
+    res.send(`
+    <html>
+        <head>
+            <title>Login</title>
+        </head>
+        <body>
+            <form method="POST" action="/auth">
+                Nombre de usuario: <input type="text" name="text"><br>
+                Contraseña: <input type="password" name="password"><br>
+                <input type="submit" value="Iniciar sesion" />
+            </form>
+        </body>
+    
+    </html>
+    `);
 });
 
 app.get('/api', ( req, res ) => {
