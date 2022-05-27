@@ -1,5 +1,5 @@
 const express = require('express');
-// import chalk from 'chalk';
+const chalk = require('chalk');
 require('dotenv').config();
 
 const server = express();
@@ -45,11 +45,9 @@ server.get('/login', ( req, res ) => {
 
 server.post('/auth', ( req, res ) => {
     const { username, password } = req.body;
-
     //Consultar BBDD i validar
     //user && password
-    const user = {username: username}
-    
+    const user = {username: username};
     const accessToken = generateAccessToken( user );
 
     res.header('authorization', accessToken).json({
@@ -57,24 +55,22 @@ server.post('/auth', ( req, res ) => {
         password: password,
         message: 'User autenticate',
         token: accessToken,
-        newProduct: 
-        {
+        newProduct: {
             ntf: '💥', id: 'dc482bbf-c72d-4454-8e08-fec0a9c29a7d', productName: 'big bang', category: 'feature', stock: 35, price: 999
-         }
+        }
     });
-})
+});
 
 server.get('/api', validateToken, ( req, res ) => {
     res.json({
         username: req.user,
-        products: [
-            
-  {
-    ntf: '🥑', id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d', productName: 'avocado', category: 'meal', stock: 9, price: 34
-  },
-  {
-    ntf: '☠', id: '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed', productName: 'death', category: 'human', stock: 1, price: 666
-  }
+        products: [            
+            {
+              ntf: '🥑', id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d', productName: 'avocado', category: 'meal', stock: 9, price: 34
+            },
+            {
+              ntf: '☠', id: '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed', productName: 'death', category: 'human', stock: 1, price: 666
+            }
         ]
     });
 });
@@ -86,9 +82,10 @@ function generateAccessToken(user) {
 
 function validateToken ( req, res, next) {
     const accessToken = req.headers['authorization'] || req.query.accesstoken;
+
     if(!accessToken) res.send('Access denied');
 
-    jwt.verify(accessToken, process.env.SECRET, (err, user) => {
+    if(accessToken) jwt.verify(accessToken, process.env.SECRET, (err, user) => {
         if(err){
             res.send('Access denied, token expired or incorrect');
         } else {
@@ -99,5 +96,5 @@ function validateToken ( req, res, next) {
 }
 
 server.listen(port, () => {
-    console.log(`Node.js Server is running...`)
+    console.log(`Node.js Server is ${chalk.green('running...')}`)
 });
