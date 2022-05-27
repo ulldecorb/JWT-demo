@@ -1,10 +1,10 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const chalk = require('chalk');
 require('dotenv').config();
 
 const server = express();
 const port = process.env.PORT || 8080;
-const jwt = require('jsonwebtoken');
 
 // Adjust middleWares
 // Parsing Parameters
@@ -75,7 +75,6 @@ server.get('/api', validateToken, ( req, res ) => {
     });
 });
 
-
 function generateAccessToken(user) {
     return jwt.sign( user, process.env.SECRET, { expiresIn: '10m'});
 }
@@ -96,5 +95,5 @@ function validateToken ( req, res, next) {
 }
 
 server.listen(port, () => {
-    console.log(`Node.js Server is ${chalk.green('running...')}`)
+    console.log(`${chalk.yellow('Node.js Server is ')}${chalk.green('running...')}`)
 });
