@@ -1,15 +1,17 @@
 const express = require('express');
-const { json } = require('express/lib/response');
-const app = express();
-const jwt = require('jsonwebtoken');
+// import chalk from 'chalk';
 require('dotenv').config();
+
+const server = express();
+const port = process.env.PORT || 8080;
+const jwt = require('jsonwebtoken');
 
 // Adjust middleWares
 // Parsing Parameters
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+server.use(express.urlencoded({ extended: false }));
+server.use(express.json());
 
-app.get('/',(req, res )=> {
+server.get('/',(req, res )=> {
     res.send(`
     <html>
         <head>
@@ -23,7 +25,7 @@ app.get('/',(req, res )=> {
     `);
 })
 
-app.get('/login', ( req, res ) => {
+server.get('/login', ( req, res ) => {
     res.send(`
     <html>
         <head>
@@ -41,8 +43,9 @@ app.get('/login', ( req, res ) => {
     `);
 });
 
-app.post('/auth', ( req, res ) => {
+server.post('/auth', ( req, res ) => {
     const { username, password } = req.body;
+
     //Consultar BBDD i validar
     //user && password
     const user = {username: username}
@@ -61,7 +64,7 @@ app.post('/auth', ( req, res ) => {
     });
 })
 
-app.get('/api', validateToken, ( req, res ) => {
+server.get('/api', validateToken, ( req, res ) => {
     res.json({
         username: req.user,
         products: [
@@ -95,6 +98,6 @@ function validateToken ( req, res, next) {
     });
 }
 
-app.listen(8080, () => {
-    console.log('Node.js Server is running...')
+server.listen(port, () => {
+    console.log(`Node.js Server is running...`)
 });
