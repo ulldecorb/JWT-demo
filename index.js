@@ -1,28 +1,45 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const chalk = require('chalk');
+const cors = require('cors');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const server = express();
 const port = process.env.PORT || 8080;
+const productsRouter = require('./routes/products.route');
+
+mongoose.connect(
+    process.env.DDBB_URL,
+    {
+        useUnifiedTopology: true,
+        useNewUrlParser: true
+    }
+);
 
 // Adjust middleWares
 // Parsing Parameters
-server.use(express.urlencoded({ extended: false }));
+// server.use(express.urlencoded({ extended: false }));
+
+server.use(cors());
 server.use(express.json());
 
+server.use('/', productsRouter);
+
 server.get('/',(req, res )=> {
-    res.send(`
-    <html>
-        <head>
-            <title>Home</title>
-        </head>
-        <body>
-            <h1>Home</h1>
-            <a href="http://localhost:8080/login">Go to Login</a>
-        </body>    
-    </html>    
-    `);
+    const {products} = req.body;
+    res.json(request);
+    // res.send(`
+    // <html>
+    //     <head>
+    //         <title>Home</title>
+    //     </head>
+    //     <body>
+    //         <h1>Home</h1>
+    //         <a href="http://localhost:8080/login">Go to Login</a>
+    //     </body>    
+    // </html>    
+    // `);
 })
 
 server.get('/login', ( req, res ) => {
@@ -95,5 +112,5 @@ function validateToken ( req, res, next) {
 }
 
 server.listen(port, () => {
-    console.log(`${chalk.yellow('Node.js Server is ')}${chalk.green('running...')}`)
+    console.log(`Node.js Server is ${chalk.green('running...')} PORT: ${chalk.yellow(port)}`)
 });
