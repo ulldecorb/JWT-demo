@@ -6,7 +6,17 @@ function productsController() {
         res.json(products)
     }
 
-    return {getProducts};
+    async function createOne(req, res) {
+    const newProducts = new Products(req.body);
+    try {
+      await newProducts.save();
+      res.json(newProducts);
+    } catch (error) {
+      res.send(error); 
+    }
+  }
+
+    return {getProducts,createOne};
 }
 
 module.exports = productsController;

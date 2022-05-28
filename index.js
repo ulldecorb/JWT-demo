@@ -26,9 +26,9 @@ server.use(express.json());
 
 server.use('/', productsRouter);
 
-server.get('/',(req, res )=> {
-    const {products} = req.body;
-    res.json(request);
+// server.get('/',(req, res )=> {
+//     const {products} = req;
+//     res.json(products);
     // res.send(`
     // <html>
     //     <head>
@@ -40,7 +40,7 @@ server.get('/',(req, res )=> {
     //     </body>    
     // </html>    
     // `);
-})
+// })
 
 server.get('/login', ( req, res ) => {
     res.send(`
