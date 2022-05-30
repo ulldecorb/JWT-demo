@@ -26,9 +26,9 @@ server.use(express.json());
 
 server.use('/', productsRouter);
 
-server.get('/',(req, res )=> {
-    const {products} = req.body;
-    res.json(request);
+// server.get('/',(req, res )=> {
+//     const {products} = req;
+//     res.json(products);
     // res.send(`
     // <html>
     //     <head>
@@ -40,7 +40,7 @@ server.get('/',(req, res )=> {
     //     </body>    
     // </html>    
     // `);
-})
+// })
 
 server.get('/login', ( req, res ) => {
     res.send(`
@@ -51,8 +51,8 @@ server.get('/login', ( req, res ) => {
         </head>
         <body>
             <form method="POST" action="/auth">
-                User name: <input type="text" name="username"><br>
-                Password: <input type="password" name="password"><br>
+                User name: <input type="text" id="username"  name="username"><br>
+                Password: <input type="password" id="password" name="password"><br>
                 <input type="submit" value="Start session" />
             </form>
         </body>    
@@ -62,21 +62,68 @@ server.get('/login', ( req, res ) => {
 
 server.post('/auth', ( req, res ) => {
     const { username, password } = req.body;
+    console.log('Username: ', username);
     //Consultar BBDD i validar
     //user && password
     const user = {username: username};
     const accessToken = generateAccessToken( user );
-
-    res.header('authorization', accessToken).json({
-        user: username,
-        password: password,
-        message: 'User autenticate',
-        token: accessToken,
-        newProduct: {
-            ntf: '💥', id: 'dc482bbf-c72d-4454-8e08-fec0a9c29a7d', productName: 'big bang', category: 'feature', stock: 35, price: 999
-        }
-    });
+    // if (username === 'admin' ){
+        res.send(`
+    <html>
+        <head>
+        <style>body{background-color: red;color:yellow;}</style>
+            <title>Auth</title>
+        </head>
+        <body>
+            <form method="POST" action="/">
+                ntf: <input type="text" name="ntf"><br>
+                id: <input type="text" name="id"><br>
+                productName: <input type="text" name="productName"><br>
+                category: <input type="text" name="category"><br>
+                stock: <input type="number" name="stock"><br>
+                price: <input type="number" name="price"><br>
+                <input type="submit" value="Start session" />
+            </form>
+        </body>    
+    </html>
+    `);
+    // }
+    // if (username !== 'admin' ){
+    //     res.header('authorization', accessToken).json({
+    //         user: username,
+    //         password: password,
+    //         message: 'User autenticate',
+    //         token: accessToken,
+    //         newProduct: {
+    //             ntf: '💥', id: 'dc482bbf-c72d-4454-8e08-fec0a9c29a7d', productName: 'big bang', category: 'feature', stock: 35, price: 999
+    //         }
+    //     })
+    // }
 });
+
+server.get('/update', (req, res ) => {
+    const {
+    ntf,
+    id,
+    productName,
+    category,
+    stock,
+    price
+    } = req.body;
+    const newProduct = {
+        ntf,
+        id,
+        productName,
+        category,
+        stock,
+        price
+    }
+})
+
+
+// -----------
+//    JWT
+// -----------
 
 server.get('/api', validateToken, ( req, res ) => {
     res.json({

@@ -6,7 +6,8 @@ function productsRouter() {
 
     routes
         .route('/')
-        .get(productsController.getProducts);
+        .get(productsController.getProducts)
+        .post(productsController.createOne);
     
     return routes;
 }
