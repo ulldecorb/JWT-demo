@@ -118,10 +118,12 @@ server.get('/update', (req, res ) => {
         stock,
         price
     }
-
-
-
 })
+
+
+// -----------
+//    JWT
+// -----------
 
 server.get('/api', validateToken, ( req, res ) => {
     res.json({
